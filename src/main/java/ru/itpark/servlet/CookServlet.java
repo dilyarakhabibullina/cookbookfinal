@@ -1,7 +1,9 @@
 package ru.itpark.servlet;
 
+import org.springframework.jdbc.core.JdbcTemplate;
 import ru.itpark.domain.Recipe;
 import ru.itpark.service.CookService;
+import ru.itpark.util.JdbcTemplate1;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -14,7 +16,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class CookServlet extends HttpServlet {
+    //   private JdbcTemplate jdbcTemblate;
+    //private JdbcTemplate jdbcTemplate;
     CookService service = new CookService();
+
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -74,18 +79,23 @@ public class CookServlet extends HttpServlet {
             final String name = req.getParameter("name");
             final String ingredients = req.getParameter("ingredients");
             final String description = req.getParameter("description");
-            service.save(id, name, ingredients, description);
+            try {
+                service.saveDataBase(new Recipe(id, name, ingredients, description));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
             //resp.sendRedirect(req.getRequestURI());
-            req.setAttribute("items", service.getInserted());
-            req.getRequestDispatcher("/WEB-INF/search.jsp").forward(req, resp);
+//            req.setAttribute("items", service.saveDataBase(recipe));
+//            req.getRequestDispatcher("/WEB-INF/search.jsp").forward(req, resp);
             return;
         }
         //
         //eq.setAttribute("myrecipes", "Мои рецепты");
 
     }
-
 }
+//
+//}
 
 
 
