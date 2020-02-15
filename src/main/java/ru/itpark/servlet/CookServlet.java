@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.HashSet;
@@ -81,13 +82,18 @@ public class CookServlet extends HttpServlet {
             final String description = req.getParameter("description");
             try {
                 service.saveDataBase(new Recipe(id, name, ingredients, description));
-            } catch (SQLException e) {
+            } catch (SQLException | ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException | InstantiationException e) {
                 e.printStackTrace();
             }
+
+           // service.save(id, district, undergrounds, price, file, uploadPath);
+            // чтобы повторно не отрисовывать, отправляем его на страницу, где итак отрисовывается весь список
+            resp.sendRedirect(req.getRequestURI());
+            return;
             //resp.sendRedirect(req.getRequestURI());
 //            req.setAttribute("items", service.saveDataBase(recipe));
 //            req.getRequestDispatcher("/WEB-INF/search.jsp").forward(req, resp);
-            return;
+
         }
         //
         //eq.setAttribute("myrecipes", "Мои рецепты");

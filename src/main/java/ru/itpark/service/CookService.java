@@ -4,7 +4,8 @@ import ru.itpark.domain.Recipe;
 import org.springframework.jdbc.core.JdbcTemplate;
 import ru.itpark.util.JdbcTemplate1;
 
-import java.sql.SQLException;
+import java.lang.reflect.InvocationTargetException;
+import java.sql.*;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -55,10 +56,27 @@ public class CookService {
                 ));
     }
 
-    public Recipe saveDataBase(Recipe recipe) throws SQLException {
-        return JdbcTemplate1.executeUpdate("jdbc:sqlite:D:/JAVA_STEP_TWO/cookbookfinal\\db1",
-                "INSERT INTO recipes VALUES ('5','kashka', 'grecha', 'tak sebe')");
-//"INSERT INTO pilots (pilotname, birthdate, experience, aircraft)  VALUES (?,?,?,?)"
+    public int saveDataBase(Recipe recipe) throws SQLException, ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        String url = "jdbc:sqlite:D:/JAVA_STEP_TWO/cookbookfinal\\db1";
+        Class.forName("org.sqlite.JDBC").getDeclaredConstructor().newInstance();
+        Connection conn = DriverManager.getConnection(url);
+        {
+            String sql = "INSERT INTO recipes (id, name, ingredients, description) VALUES (?, ?, ?, ?)";
+            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+            {
+                preparedStatement.setString(1, recipe.getId());
+                preparedStatement.setString(2, recipe.getName());
+                preparedStatement.setString(3, recipe.getIngredients());
+                preparedStatement.setString(4, recipe.getDescription());
+
+                return preparedStatement.executeUpdate();
+            }
+
+        }
+
+//        return JdbcTemplate1.executeUpdate("jdbc:sqlite:D:/JAVA_STEP_TWO/cookbookfinal\\db1",
+//                "INSERT INTO recipes VALUES ('5','kashka', 'grecha', 'tak sebe')");
+////"INSERT INTO pilots (pilotname, birthdate, experience, aircraft)  VALUES (?,?,?,?)"
     }
 
     public List<Recipe> searchByName(String name) throws SQLException {
@@ -107,4 +125,5 @@ public class CookService {
 //        items.add(recipe);
 //    }
 }
+
 

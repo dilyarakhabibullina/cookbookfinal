@@ -7,14 +7,14 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class JdbcTemplate1 {
-    public static Recipe executeUpdate(String url, String sql) throws SQLException {
-       Recipe recipe = new Recipe();
+    public static int executeUpdate(String url, String sql) throws SQLException {
+     //  Recipe recipe = new Recipe();
         //  try {
         Connection connection = DriverManager.getConnection(url);
         Statement statement = connection.createStatement();
         int s = statement.executeUpdate(sql);
         //List<Recipe> result = new LinkedList<>();
-        return recipe;
+        return s;
         //        }
         // catch()
         // {
