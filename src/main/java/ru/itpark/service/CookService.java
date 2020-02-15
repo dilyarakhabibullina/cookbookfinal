@@ -57,7 +57,7 @@ public class CookService {
 
     public Recipe saveDataBase(Recipe recipe) throws SQLException {
         return JdbcTemplate1.executeUpdate("jdbc:sqlite:D:/JAVA_STEP_TWO/cookbookfinal\\db1",
-                "INSERT INTO recipes VALUES ('3','kasha', 'foo', 'nevkusno')");
+                "INSERT INTO recipes VALUES ('5','kashka', 'grecha', 'tak sebe')");
 //"INSERT INTO pilots (pilotname, birthdate, experience, aircraft)  VALUES (?,?,?,?)"
     }
 
