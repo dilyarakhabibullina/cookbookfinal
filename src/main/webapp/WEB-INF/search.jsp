@@ -28,6 +28,19 @@
 </li>
     <% } %>
 </ul>
+
+    <% Recipe item = (Recipe) request.getAttribute("item"); %>
+    <form action="<%= request.getContextPath() %>/" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="id" value="<%= item == null ? "" : item.getId() %>">
+        <input type="hidden" name="action" value="save">
+        <input name="name" placeholder="Название рецепта" value="<%= item == null ? "" : item.getName() %>">
+        <input name="ingredients" placeholder="Состав" value="<%= item == null ? "" : item.getIngredients() %>">
+        <input name="description" placeholder="Описание" value="<%= item == null ? "" : item.getDescription() %>">
+<%--        <input type="file" name="file" accept="image/*">--%>
+        <button>Сохранить</button>
+    </form>
+
+
 </div>
 </body>
 </html>

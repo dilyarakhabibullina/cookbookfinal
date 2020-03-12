@@ -4,8 +4,10 @@ import ru.itpark.domain.Recipe;
 import ru.itpark.util.JdbcTemplate;
 
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 //TODOпоиск отдельно по названию, отдельно по ингредиентам
 
@@ -14,6 +16,11 @@ import java.util.stream.Collectors;
 
 public class CookService {
     public final List<Recipe> items = new LinkedList<>();
+
+
+    public Collection<Recipe> getInserted() {
+        return items;
+    }
 
     public CookService() {
         try {
@@ -38,6 +45,29 @@ public class CookService {
         return foundByName.stream()
                 .filter(o -> o.getName().contains(name))
                 .collect(Collectors.toList());
+    }
+
+    public void save(String id, String name, String ingredients, String description) {
+        if (id.equals("")) {
+            id = generateId();
+            // writeFile(id, file, path);
+            insert(new Recipe(id, name, ingredients, description));
+            return;
+        }
+        update (new Recipe(id, name, ingredients, description));
+    }
+
+    private void update(Recipe recipe) {
+        boolean removed = items.removeIf(o -> o.getId().equals(recipe.getId()));
+        items.add(recipe);
+    }
+
+    private String generateId() {
+        return UUID.randomUUID().toString();
+    }
+
+    private void insert(Recipe recipe) {
+        items.add(recipe);
     }
 }
 

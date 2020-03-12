@@ -66,4 +66,26 @@ public class CookServlet extends HttpServlet {
             }
         }
     }
+
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        final String action = req.getParameter("action");
+        if (action.equals("save")) {
+            final String id = req.getParameter("id");
+            final String name = req.getParameter("name");
+            final String ingredients = req.getParameter("ingredients");
+            final String description = req.getParameter("description");
+            service.save(id, name, ingredients, description);
+            //resp.sendRedirect(req.getRequestURI());
+            req.setAttribute("items", service.getInserted());
+            req.getRequestDispatcher("/WEB-INF/search.jsp").forward(req, resp);
+            return;
+        }
+        //
+        //eq.setAttribute("myrecipes", "Мои рецепты");
+
+    }
+
 }
+
+
+
