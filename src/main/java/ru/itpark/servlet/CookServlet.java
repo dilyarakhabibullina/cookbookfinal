@@ -25,7 +25,9 @@ public class CookServlet extends HttpServlet {
 //            resp.getWriter().write("THE BEST COOKBOOK");
 //        }
         if (url.equals("/")) {
+            final String q = req.getParameter("q");
             req.setAttribute("myrecipes", "Мои рецепты");
+            req.setAttribute("findByName", q);
             try {
                 req.setAttribute("items", service.getAll());
             } catch (SQLException e) {
@@ -48,7 +50,7 @@ public class CookServlet extends HttpServlet {
 //            return;
 //        }
         if (url.equals("/search")) {
-            req.setAttribute("page-title", "Вот что!");
+            req.setAttribute("myrecipes", "Вот что нашлось");
             final Collection<Recipe> foundByName;
             try {
                 foundByName = service.searchByName(req.getParameter("q"));

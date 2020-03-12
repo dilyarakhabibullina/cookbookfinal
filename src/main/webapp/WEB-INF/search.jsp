@@ -11,7 +11,7 @@
 <body>
 <div class="container">
 <form action="<%=request.getContextPath()%>/search">
-    <input name = "q" placeholder="Поиск по названию" value=<%=("findByName") == null ? "" : request.getAttribute("findByName")%>>
+    <input name = "q" placeholder="Поиск по названию" value=<%=request.getAttribute("findByName") == null ? "" : request.getAttribute("findByName")%>>
 </form>
 
 
