@@ -74,6 +74,7 @@ public class CookServlet extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        req.setCharacterEncoding("UTF-8");
         final String action = req.getParameter("action");
         if (action.equals("save")) {
             final String id = req.getParameter("id");
