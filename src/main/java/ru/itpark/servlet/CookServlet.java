@@ -1,9 +1,7 @@
 package ru.itpark.servlet;
 
-import org.springframework.jdbc.core.JdbcTemplate;
 import ru.itpark.domain.Recipe;
 import ru.itpark.service.CookService;
-import ru.itpark.util.JdbcTemplate1;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -17,19 +15,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class CookServlet extends HttpServlet {
-    //   private JdbcTemplate jdbcTemblate;
-    //private JdbcTemplate jdbcTemplate;
     CookService service = new CookService();
-
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
         req.setCharacterEncoding("UTF-8");
         String url = req.getRequestURI().substring(req.getContextPath().length());
-//        if (url.equals("/")) {
-//            resp.getWriter().write("THE BEST COOKBOOK");
-//        }
+
         if (url.equals("/")) {
             final String q = req.getParameter("q");
             req.setAttribute("myrecipes", "Мои рецепты");
@@ -87,7 +79,7 @@ public class CookServlet extends HttpServlet {
                 e.printStackTrace();
             }
 
-           // service.save(id, district, undergrounds, price, file, uploadPath);
+            // service.save(id, district, undergrounds, price, file, uploadPath);
             // чтобы повторно не отрисовывать, отправляем его на страницу, где итак отрисовывается весь список
             resp.sendRedirect(req.getRequestURI());
             return;
