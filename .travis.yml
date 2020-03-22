@@ -9,3 +9,8 @@ notifications:
       - khdilyara@rambler.ru
     on_failure: always
     on_success: change
+
+deploy:
+  provider: heroku
+  api_key: $HEROKU_KEY
+  app: cookbook-2020
