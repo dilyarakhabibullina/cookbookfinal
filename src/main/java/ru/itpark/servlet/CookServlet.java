@@ -88,8 +88,16 @@ public class CookServlet extends HttpServlet {
 //            req.getRequestDispatcher("/WEB-INF/search.jsp").forward(req, resp);
 
         }
-        //
-        //eq.setAttribute("myrecipes", "Мои рецепты");
+        if (action.equals("remove")){
+            try {
+                service.removeById (req.getParameter("id"));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            resp.sendRedirect(req.getRequestURI());
+            return;
+        }
+
 
     }
 }

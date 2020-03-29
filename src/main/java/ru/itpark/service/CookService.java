@@ -1,15 +1,12 @@
 package ru.itpark.service;
 
 import ru.itpark.domain.Recipe;
-import org.springframework.jdbc.core.JdbcTemplate;
 import ru.itpark.util.JdbcTemplate1;
 
 import java.lang.reflect.InvocationTargetException;
 import java.sql.*;
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 //TODOпоиск отдельно по названию, отдельно по ингредиентам
 
@@ -25,7 +22,7 @@ public class CookService {
         }
     }
 
-    // public final List<Recipe> items = new LinkedList<>();
+    public final List<Recipe> items = new LinkedList<>();
     //private final JdbcTemplate jdbcTemplate;
     // private final JdbcTemplate1 jdbcTemplate1;
 
@@ -85,6 +82,16 @@ public class CookService {
                 .filter(o -> o.getName().contains(name))
                 .collect(Collectors.toList());
     }
+
+public int removeById(String id) throws SQLException {
+    return JdbcTemplate1.executeUpdate("jdbc:sqlite:D:/JAVA_STEP_TWO/cookbookfinal\\db1",
+
+    "DELETE FROM recipes WHERE id=2");
+}
+
+//    public void removeById(String id) {
+//items.removeIf (o -> o.getId().equals("id"));
+//    }
 
 //    public void save(String id, String name, String ingredients, String description) {
 //        if (id.equals("")) {

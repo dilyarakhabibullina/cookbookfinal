@@ -26,6 +26,11 @@
     <%=item.getDescription()%>
 
 </li>
+<form  action="<%= request.getContextPath() %>/" method="post">
+                <input type="hidden" name="id" value="<%= item.getId() %>">
+                <input type="hidden" name="action" value="remove">
+                <button>Удалить</button>
+            </form>
     <% } %>
 </ul>
 
@@ -39,6 +44,8 @@
 <%--        <input type="file" name="file" accept="image/*">--%>
         <button>Сохранить</button>
     </form>
+
+
 
 
 </div>
