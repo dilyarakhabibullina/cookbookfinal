@@ -3,26 +3,30 @@ package ru.itpark.service;
 import ru.itpark.domain.Recipe;
 import ru.itpark.util.JdbcTemplate1;
 
+import javax.sql.ConnectionPoolDataSource;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
+
 //TODOпоиск отдельно по названию, отдельно по ингредиентам
 
 //добавление, редактирование и удаление- для страницы администратора
 
 
 public class CookService {
-    public CookService() {
+    public CookService() throws SQLException {
         try {
-            Class.forName("org.sqlite.JDBC");
+            Class.forName ("org.sqlite.JDBC");
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            e.printStackTrace ( );
         }
     }
 
-    public final List<Recipe> items = new LinkedList<>();
+    //public final List<Recipe> items = new LinkedList<>();
     //private final JdbcTemplate jdbcTemplate;
     // private final JdbcTemplate1 jdbcTemplate1;
 
@@ -44,29 +48,38 @@ public class CookService {
 
 
     public List<Recipe> getAll() throws SQLException {
-        return JdbcTemplate1.executeQuery("jdbc:sqlite:D:/JAVA_STEP_TWO/cookbookfinal\\db1",
-                "SELECT id, name, ingredients, description from recipes", resultSet -> new Recipe(
-                        resultSet.getString("id"),
-                        resultSet.getString("name"),
-                        resultSet.getString("ingredients"),
-                        resultSet.getString("description")
+        return JdbcTemplate1.executeQuery ("jdbc:sqlite:D:/JAVA_STEP_TWO/cookbookfinal\\db1",
+                "SELECT id, name, ingredients, description from recipes", resultSet -> new Recipe (
+                        resultSet.getString ("id"),
+                        resultSet.getString ("name"),
+                        resultSet.getString ("ingredients"),
+                        resultSet.getString ("description")
                 ));
     }
+//public String generatedId () {
+//    return UUID.randomUUID().toString();
+//}
 
     public int saveDataBase(Recipe recipe) throws SQLException, ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         String url = "jdbc:sqlite:D:/JAVA_STEP_TWO/cookbookfinal\\db1";
-        Class.forName("org.sqlite.JDBC").getDeclaredConstructor().newInstance();
-        Connection conn = DriverManager.getConnection(url);
+        //String id = recipe.getId();
+
+
+        //String id = generatedId();
+
+
+        Class.forName ("org.sqlite.JDBC").getDeclaredConstructor ( ).newInstance ( );
+        Connection conn = DriverManager.getConnection (url);
         {
             String sql = "INSERT INTO recipes (id, name, ingredients, description) VALUES (?, ?, ?, ?)";
-            PreparedStatement preparedStatement = conn.prepareStatement(sql);
+            PreparedStatement preparedStatement = conn.prepareStatement (sql);
             {
-                preparedStatement.setString(1, recipe.getId());
-                preparedStatement.setString(2, recipe.getName());
-                preparedStatement.setString(3, recipe.getIngredients());
-                preparedStatement.setString(4, recipe.getDescription());
+                preparedStatement.setString (1, recipe.generatedId ( ));
+                preparedStatement.setString (2, recipe.getName ( ));
+                preparedStatement.setString (3, recipe.getIngredients ( ));
+                preparedStatement.setString (4, recipe.getDescription ( ));
 
-                return preparedStatement.executeUpdate();
+                return preparedStatement.executeUpdate ( );
             }
 
         }
@@ -77,60 +90,163 @@ public class CookService {
     }
 
     public List<Recipe> searchByName(String name) throws SQLException {
-        List<Recipe> foundByName = getAll();
-        return foundByName.stream()
-                .filter(o -> o.getName().contains(name))
-                .collect(Collectors.toList());
+        List<Recipe> foundByName = getAll ( );
+        return foundByName.stream ( )
+                          .filter (o -> o.getName ( ).contains (name))
+                          .collect (Collectors.toList ( ));
     }
 
-public int removeById(String id) throws SQLException {
-    return JdbcTemplate1.executeUpdate("jdbc:sqlite:D:/JAVA_STEP_TWO/cookbookfinal\\db1",
+    public int removeById(String id) throws SQLException, ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        String url = "jdbc:sqlite:D:/JAVA_STEP_TWO/cookbookfinal\\db1";
+        Class.forName ("org.sqlite.JDBC").getDeclaredConstructor ( ).newInstance ( );
+        Connection conn = DriverManager.getConnection (url);
+        {
+            String sql = "DELETE FROM recipes WHERE id=?";
+            PreparedStatement preparedStatement = conn.prepareStatement (sql);
+            {
+                preparedStatement.setString (1, id);
 
-    "DELETE FROM recipes WHERE id=2");
-}
+                return preparedStatement.executeUpdate ( );
+            }
 
-//    public void removeById(String id) {
-//items.removeIf (o -> o.getId().equals("id"));
-//    }
+        }
+    }
 
-//    public void save(String id, String name, String ingredients, String description) {
-//        if (id.equals("")) {
-//            id = generateId();
-//            // writeFile(id, file, path);
-//            insert(new Recipe(id, name, ingredients, description));
-//            return;
-//        }
-//        update (new Recipe(id, name, ingredients, description));
-//    }Re
+    public int edit(String name, String ingredients, String description) throws SQLException, ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        String url = "jdbc:sqlite:D:/JAVA_STEP_TWO/cookbookfinal\\db1";
+        Class.forName ("org.sqlite.JDBC").getDeclaredConstructor ( ).newInstance ( );
+        Connection conn = DriverManager.getConnection (url);
+        {
+            String sql = "UPDATE recipes SET name=?, ingredients=?, description=?; ";
+            PreparedStatement preparedStatement = conn.prepareStatement (sql);
+            {
+                //preparedStatement.setString(1, id);
+                preparedStatement.setString (1, name);
+                preparedStatement.setString (2, ingredients);
+                preparedStatement.setString (3, description);
 
-//    public List<Recipe> save(Recipe item) throws SQLException {
-//        // if (pilot.getId() == 0) {
-//        return jdbcTemplate1.executeQuery("jdbc:sqlite:D:/JAVA_STEP_TWO/cookbookfinal\\db1", "INSERT INTO recipes (id, name, ingredients, description)  VALUES (?,?,?,?)",
-//                resultSet -> new Recipe(
-//                        resultSet.getString("id"),
-//                        resultSet.getString("name"),
-//                        resultSet.getString("ingredients"),
-//                        resultSet.getString("description")
+                return preparedStatement.executeUpdate ( );
+            }
+
+        }
+        //public int getById(String id) throws ClassNotFoundException, NoSuchMethodException, SQLException, IllegalAccessException, InvocationTargetException, InstantiationException {
+//        String url = "jdbc:sqlite:D:/JAVA_STEP_TWO/cookbookfinal\\db1";
+//        Class.forName ("org.sqlite.JDBC").getDeclaredConstructor ( ).newInstance ( );
+//        Connection conn = DriverManager.getConnection (url);
+//        {
+//            String sql = "SELECT * FROM recipes WHERE id=?";
+//            PreparedStatement preparedStatement = conn.prepareStatement (sql);
+//            {
+//                preparedStatement.setString (1, id);
+//
+//                return preparedStatement.executeUpdate ( );
+//            }
+//
+    }
+
+    public Recipe getById(String id) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException, SQLException {
+        Recipe recipe = null;
+        Class.forName ("org.sqlite.JDBC").getDeclaredConstructor ( ).newInstance ( );
+        Connection conn = DriverManager.getConnection ("jdbc:sqlite:D:/JAVA_STEP_TWO/cookbookfinal\\db1");
+        PreparedStatement pr = conn.prepareStatement ("SELECT id, name, ingredients, description from recipes WHERE id=?");
+        pr.setString (1, id);
+        ResultSet rs = pr.executeQuery ( );
+        if (rs.next ( )) {
+            recipe = new Recipe ( );
+            recipe.setId (rs.getString (1));
+            recipe.setName (rs.getString (2));
+            recipe.setIngredients (rs.getString (3));
+            recipe.setDescription (rs.getString (4));
+            conn.close ( );
+        }
+        return recipe;
+    }
+
+
+//        return JdbcTemplate1.executeQuery (,
+//                , resultSet -> new Recipe (
+//                        resultSet.getString ("id"),
+//                        resultSet.getString ("name"),
+//                        resultSet.getString ("ingredients"),
+//                        resultSet.getString ("description")
 //                ));
-//
-    //  } else {
-    //  jdbcTemplate.update("UPDATE pilots SET pilotname = ?, birthdate = ?, experience = ?, aircraft = ? WHERE id = ?", pilot.getPilotname(), pilot.getBirthdate(), pilot.getExperience(), pilot.getAircraft(), pilot.getId()
-    // );
 
-
-    //}
-//    private void update(Recipe recipe) {
-//        boolean removed = items.removeIf(o -> o.getId().equals(recipe.getId()));
-//        items.add(recipe);
-//    }
+//    public Recipe getById(String id) throws ClassNotFoundException, NoSuchMethodException, SQLException, IllegalAccessException, InvocationTargetException, InstantiationException {
+//        String url = "jdbc:sqlite:D:/JAVA_STEP_TWO/cookbookfinal\\db1";
+//        Class.forName ("org.sqlite.JDBC").getDeclaredConstructor ( ).newInstance ( );
+//        Connection conn = DriverManager.getConnection (url);
+//        {
+//            String sql = "SELECT *  FROM recipes WHERE id=?";
+//            PreparedStatement preparedStatement = conn.prepareStatement (sql);
+//            {
+//                preparedStatement.setString (1, id);
+//               // preparedStatement.setString (2, name);
+//                //preparedStatement.setString (3, ingredients);
+//                //preparedStatement.setString (4, description);
 //
-//    private String generateId() {
-//        return UUID.randomUUID().toString();
-//    }
-//
-//    private void insert(Recipe recipe) {
-//        items.add(recipe);
+//                return (Recipe) preparedStatement.executeQuery ( );
+//            }
+////
+////        }
+//        }
 //    }
 }
+//    public int getById(String id) throws ClassNotFoundException, NoSuchMethodException, SQLException, IllegalAccessException, InvocationTargetException, InstantiationException {
+//        String url = "jdbc:sqlite:D:/JAVA_STEP_TWO/cookbookfinal\\db1";
+//        Class.forName ("org.sqlite.JDBC").getDeclaredConstructor ( ).newInstance ( );
+//        Connection conn = DriverManager.getConnection (url);
+//        {
+//            String sql = "SELECT * FROM recipes WHERE id=?";
+//            PreparedStatement preparedStatement = conn.prepareStatement (sql);
+//            {
+//                preparedStatement.setString (1, id);
+//
+//                return preparedStatement.executeUpdate ( );
+//            }
+//
+//        }
+//    }
+//    public List<Recipe> getById() throws SQLException {
+//
+//        return JdbcTemplate1.executeQuery ("jdbc:sqlite:D:/JAVA_STEP_TWO/cookbookfinal\\db1",
+//                "SELECT id, name, ingredients, description from recipes WHERE id=?", resultSet -> new Recipe (
+//                        resultSet.getString ("id"),
+//                        resultSet.getString ("name"),
+//                        resultSet.getString ("ingredients"),
+//                        resultSet.getString ("description")
+//                ));
+//    }
 
+
+//private final Collection<Recipe> items = new LinkedList<> (getAll());
+
+//
+//    public Collection<Recipe> getItAll() {
+//        return items;
+//    }
+
+//    public Recipe getById(String id) {
+//       //Collection<Recipe> items = new LinkedList<>();
+//        Recipe item = items.stream ()
+//                .filter(o -> o.getId().equals(id))
+//                           .findAny ( );
+//        return item;
+//                }
+
+//    public Recipe getById(String id) {
+//        //List<Recipe> resultDistrict = new ArrayList<> ();
+//        Recipe item = new Recipe ( );
+//        for (Recipe item1 : items) {
+//            if (item1.getId ( ).equals (id)) {
+//                //resultDistrict.add(id);
+//            }
+//        }
+//        return item;
+////
+//   public House getById(String id) {
+//        return items.stream()
+//                .filter(o -> o.getId().equals(id))
+//                .findAny()
+//                .orElseThrow(NotFoundException::new);
+//    }
 

@@ -31,6 +31,11 @@
                 <input type="hidden" name="action" value="remove">
                 <button>Удалить</button>
             </form>
+            <form  action="<%= request.getContextPath() %>/" method="post">
+                           <input type="hidden" name="id" value="<%= item.getId() %>">
+                           <input type="hidden" name="action" value="edit">
+                           <button>Редактировать</button>
+                       </form>
     <% } %>
 </ul>
 

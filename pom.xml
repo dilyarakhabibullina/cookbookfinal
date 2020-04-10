@@ -54,6 +54,11 @@
             <artifactId>spring-jdbc</artifactId>
             <version>5.2.1.RELEASE</version>
         </dependency>
+        <dependency>
+            <groupId>org.ops4j.base</groupId>
+            <artifactId>ops4j-base-io</artifactId>
+            <version>1.5.1</version>
+        </dependency>
     </dependencies>
     <build>
         <finalName>cookbook-2020</finalName>
