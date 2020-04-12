@@ -52,6 +52,7 @@ public class CookServlet extends HttpServlet {
 //            return;
 //        }
         if (url.equals ("/search")) {
+
             req.setAttribute ("myrecipes", "Вот что нашлось");
             final Collection<Recipe> foundByName;
             try {
@@ -64,9 +65,9 @@ public class CookServlet extends HttpServlet {
                 req.getRequestDispatcher ("/WEB-INF/search.jsp").forward (req, resp);
             } catch (SQLException e) {
                 e.printStackTrace ( );
+            }
 
             }
-        }
     }
 
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
@@ -118,15 +119,18 @@ public class CookServlet extends HttpServlet {
                 } catch (InstantiationException e) {
                     e.printStackTrace ( );
                 }
-                
+
             } catch (SQLException e) {
                 e.printStackTrace ( );
             }
-
-
+/*
+String i= service.getAll ();
+String items = service.removeById(id);
+*/
             try {
-                req.setAttribute ("items", service.getAll ( ));
-            } catch (SQLException e) {
+                               // req.setAttribute ("items", service.removeById (id));
+                               req.setAttribute ("items", service.deleteId (id));
+            } catch (SQLException | ClassNotFoundException | NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
                 e.printStackTrace ( );
             }
 

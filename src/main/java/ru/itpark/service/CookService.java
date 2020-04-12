@@ -161,7 +161,22 @@ public class CookService {
         }
         return recipe;
     }
+    public List<Recipe> deleteId(String id) throws SQLException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
 
+        Recipe recipe = getById (id);
+        id = recipe.getId ();
+        removeById (id);
+        List<Recipe> foundToEdit = getAll();
+        return foundToEdit;
+
+
+       //int nalfi = removeById (id);
+
+        //String = getById (String id);
+//        return foundToEdit.stream ( )
+//                          .filter (o -> o.getId ( )!=id)
+//                          .collect (Collectors.toList ( ));
+    }
 
 //        return JdbcTemplate1.executeQuery (,
 //                , resultSet -> new Recipe (
